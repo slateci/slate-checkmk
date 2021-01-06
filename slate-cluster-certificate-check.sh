@@ -15,7 +15,7 @@ kubectlconfig=$1
 clustername=$2
 
 IP=$(cat $kubectlconfig 2>/dev/null | grep server | awk '{print $2}' | cut -d'/' -f3)
-ENDDATE=$(timeout 1 openssl s_client -showcerts -connect "$IP" 2>/dev/null | openssl x509 -noout -enddate 2>/dev/null | cut -d'=' -f2)
+ENDDATE=$(timeout 5 openssl s_client -showcerts -connect "$IP" 2>/dev/null | openssl x509 -noout -enddate 2>/dev/null | cut -d'=' -f2)
 if [ -n "$ENDDATE" ]; then
   if [ $(date -d "$ENDDATE" +%s) -gt $(date -d "now + 60 days" +%s) ]; then
     echo 0 SLATE-cluster-$clustername-certificate - Certificate is valid and willl expire in more than 60 days: $IP \($ENDDATE\)
