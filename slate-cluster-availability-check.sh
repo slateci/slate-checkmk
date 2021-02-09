@@ -15,7 +15,12 @@ kubectlconfig=$1
 clustername=$2
 
 getnodes=`timeout 10 kubectl --kubeconfig $kubectlconfig get nodes 2>&1`
-if [ $? -eq 0 ]; then
+result=$?
+if [ -z "$getnodes" ]; then
+    getnodes=`timeout 10 kubectl --kubeconfig $kubectlconfig get nodes 2>&1`
+    result=$?
+fi
+if [ $result -eq 0 ]; then
     echo "0 SLATE-cluster-$clustername-available - Cluster responding"
 else
     echo "2 SLATE-cluster-$clustername-available - Cluster not responding ($getnodes)"    
