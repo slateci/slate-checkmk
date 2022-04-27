@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  slate_api_scripts:
+    container_name: slate_checkmk_scripts
+    image: slate_checkmk_scripts:local
+    command: "/resources/docker/scripts/init/checkmk-scripts.sh"
+    build:
+      context: .
+      dockerfile: ./resources/docker/Dockerfile
+      target: local-stage
+    environment:
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      SLATE_API_CONF: ${SLATE_API_CONF}
+      SLATE_API_ENDPOINT: ${SLATE_API_ENDPOINT}
+      SLATE_API_PORT: ${SLATE_API_PORT}
+      SLATE_API_TOKEN: ${SLATE_API_TOKEN}
+    tty: true
+    volumes:
+      - ./scripts:/slate/scripts
+      - ./resources:/resources
