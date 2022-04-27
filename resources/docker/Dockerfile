@@ -4,6 +4,7 @@
 ARG baseimage=centos:7
 ARG checkmkversion=2.0.0p21
 ARG kubectlversion=1.21.11
+ARG port=6556
 
 #######################################
 ## Local Stage                        #
@@ -13,6 +14,7 @@ FROM ${baseimage} as local-stage
 # Docker image build arguments:
 ARG checkmkversion
 ARG kubectlversion
+ARG port
 
 # Set up custom yum repos:
 COPY ./resources/docker/yum.repos.d/* /etc/yum.repos.d
@@ -49,6 +51,9 @@ RUN mkdir /slate
 # Change working directory:
 WORKDIR /
 
+# Ports:
+EXPOSE ${port}
+
 # Run once the container has started:
 ENTRYPOINT [ "/bin/bash" ]
 
@@ -60,6 +65,7 @@ FROM ${baseimage} as release-stage
 # Docker image build arguments:
 ARG checkmkversion
 ARG kubectlversion
+ARG port
 
 # Package installs/updates:
 RUN yum install epel-release -y
@@ -94,6 +100,9 @@ WORKDIR /slate
 # Copy in all scripts:
 COPY ./scripts ./scripts
 RUN chmod +x ./scripts/*.sh
+
+# Ports:
+EXPOSE ${port}
 
 # Change working directory:
 WORKDIR /
