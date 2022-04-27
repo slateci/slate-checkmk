@@ -2,15 +2,20 @@
 
 # Docker image build arguments:
 ARG baseimage=centos:7
+ARG kubectlversion=1.21.11
 
 #######################################
 ## Local Stage                        #
 #######################################
 FROM ${baseimage} as local-stage
 
+# Set up custom yum repos:
+COPY ./resources/docker/yum.repos.d/* /etc/yum.repos.d
+
 # Package installs/updates:
 RUN yum install epel-release -y
 RUN yum install bind-utils \
+    kubectl-${kubectlversion} \
     less \
     net-tools \
     openssh-clients \
@@ -62,6 +67,9 @@ WORKDIR /usr/local/bin
 COPY --from=local-stage /usr/local/aws-cli /usr/local/aws-cli
 RUN ln -s /usr/local/aws-cli/v2/current/bin/aws aws && \
     ln -s /usr/local/aws-cli/v2/current/bin/aws_completer aws_completer
+
+# Install Kubectl:
+COPY --from=local-stage /usr/bin/kubectl kubectl
 
 # Change working directory:
 WORKDIR /slate
