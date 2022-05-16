@@ -26,7 +26,7 @@ if [ -n "$ENDDATE" ]; then
       echo 2 SLATE-cluster-$clustername-certificate - Certificate is invalid or needs to be renewed: $IP \($ENDDATE\)
       EMAIL=`./get_cluster_email.sh $clustername`
       GROUPEMAIL=`../slate group list-allowed-clusters atlas-squid | grep "$clustername " > /dev/null && echo -n ", " && ./get_group_email.sh atlas-squid`
-      ./mailgun.sh no-reply@slateci.io "$EMAIL$GROUPEMAIL, slateci-ops@googlegroups.com" "SLATE: Certificate expiration TEST - IGNORE" "The certificate for cluster $clustername IP $IP needs to be renewed (expiration date $ENDDATE). For help on how to renew a Kubernetes certificate, see <a href=\"https://slateci.io/docs/resources/k8s-certificates.html\">https://slateci.io/docs/resources/k8s-certificates.html</a>"
+      ./mailgun.sh no-reply@slateci.io "$EMAIL$GROUPEMAIL, slateci-ops@googlegroups.com" "SLATE: Certificate expiration" "The certificate for cluster $clustername IP $IP needs to be renewed (expiration date $ENDDATE). For help on how to renew a Kubernetes certificate, see <a href=\"https://slateci.io/docs/resources/k8s-certificates.html\">https://slateci.io/docs/resources/k8s-certificates.html</a>"
     fi
   fi
 else
